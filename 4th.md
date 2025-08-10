@@ -151,12 +151,9 @@ SELECT
     DATEDIFF(CURDATE(), order_date) AS days_since_order
 FROM Orders
 ORDER BY order_date;
-
-
 ```
 
 ```sql
-
 /* Easy: Basic aggregate functions */
 SELECT 
     COUNT(*) AS total_orders,
@@ -263,8 +260,6 @@ SELECT
 FROM Orders
 WHERE amount > (SELECT AVG(amount) FROM Orders)
 ORDER BY amount DESC;
-
-
 ```
 
 ```sql
@@ -282,12 +277,9 @@ WHERE o1.amount > (
     WHERE o2.customer_id = o1.customer_id
 )
 ORDER BY o1.customer_id, o1.amount DESC;
-
-
 ```
 
 ```sql
-
 /* Easy: Demonstrate FK constraint violation */
 -- This INSERT will FAIL due to foreign key constraint
 -- INSERT INTO Orders (customer_id, order_date, amount)
@@ -309,8 +301,6 @@ SELECT 'CHECK constraint prevents inserting negative amounts' AS message;
 
 -- Show constraint information
 SHOW CREATE TABLE Orders;
-
-
 ```
 
 ```sql
@@ -324,9 +314,32 @@ SELECT
     (SELECT COUNT(*) FROM Customers) AS total_customers,
     (SELECT COUNT(*) FROM Orders) AS total_orders,
     (SELECT SUM(amount) FROM Orders) AS total_revenue;
-
-
 ```
 
 
 
+### Order of Precedence
+
+- FROM
+- WHERE
+- GROUP BY
+- HAVING
+- SELECT
+- ORDER BY
+- LIMIT/OFFSET
+
+
+
+
+
+### Named CHECK constraint on multiple columns
+```sql
+CREATE TABLE Persons (
+    ID INT NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    FirstName VARCHAR(255),
+    Age INT,
+    City VARCHAR(255),
+    CONSTRAINT CHK_Person CHECK (Age >= 18 AND City = 'Sandnes')
+);
+```
